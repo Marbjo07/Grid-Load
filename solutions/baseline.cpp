@@ -18,6 +18,7 @@ int main() {
 
 	vector<vector<float>> p(n, vector<float>(m));
 	vector<vector<ll>> d(n, vector<ll>(m));
+	
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			cin >> p[i][j];
@@ -29,19 +30,27 @@ int main() {
 		}
 	}
 
-
 	int numDays = 100;
 
 	for (int day = 0; day < numDays; day++) {
+		vector<float> price(MINUTES);
+		for (auto& e : price) cin >> e;
+
+		float external_price;
+		cin >> external_price;
+
 		vector<float> remainCharge(n);
 		for (auto& e : remainCharge) cin >> e;
 
-		float rate = x / (float)n;
+		float maxRate = x / (float)n;
 		for (int i = 0; i < n; i++) {
+			float rate = (a[i] - remainCharge[i]) / (float)MINUTES;
+			rate = min(rate, maxRate);
+		
 			for (int j = 0; j < MINUTES; j++) {
 				cout << rate << " ";
 			}
-			cout << endl;
+			cout << "\n";
 		}
 		cout << flush;
 	}
