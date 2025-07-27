@@ -2,14 +2,8 @@
 
 ## Problem Statement
 
-Your friend Bob is the owner of a couple charging stations around the world. He made a mistake when advertising for his service, offering free charging for 100 days. He has also made a  
-deal with the city government, which limits the amount of energy that can be drawn from the grid. Each station is tied to a car, and each car has a maximum capacity.  
-Due to overheeting issues, the stations can only charge the cars at night. Bob has analyed the patterns of the cars and has found the different trips that each car will take.  
-He has also found the minimum charge required to complete each trip, and the chance that this charge will be sampled. Each car will return to the same station after completing its trip.  
-Bob wants to minimize the cost of charging the cars while ensuring that they can complete their trips.  
-If a car cannot complete its trip, the car owner will bill Bob for using a public charging station, which has a large markup.  
-Bobs system runs for 100 consecutive nights. Each night you are given updated battery levels and new prices. You reply with that night's charging plan.  
-The cost‐function is applied per‑night, but the simulation spans 100 days.
+Your friend Bob is the owner of a couple charging stations around the world. He made a mistake when advertising for his service, offering free charging for 100 days. He has also made a deal with the city government, which limits the amount of energy that can be drawn from the grid. Each station is tied to a car, and each car has a maximum capacity. Due to overheating issues, the stations can only charge the cars at night. Bob has analyzed the patterns of the cars and has found the different trips that each car will take. He has also found the minimum charge required to complete each trip, and the chance that this charge will be sampled. Each car will return to the same station after completing its trip. Bob wants to minimize the cost of charging the cars while ensuring that they can complete their trips. If a car cannot complete its trip, the car owner will bill Bob for using a public charging station, which has a large markup. Bobs system runs for 100 consecutive nights. Each night you are given updated battery levels and new prices. You reply with that night's charging plan.  
+The cost‐function is applied per‑night, but the simulation spans 100 days.  
 Help Bob loss the least amount of money possible.
 
 ## Score Function
@@ -20,7 +14,7 @@ Initially $remainCharge_i = \frac{a_i}{2}$
 Let $charge_{i, j}$ be the charge the $i$-th car has at the $j$-th minute.  
 More formally, $ charge_{i, j} = remainCharge_i + \sum_{k=0}^{j} s_{i, k} $
 
-If, at the end of the night, the charge for the $i$-th car is less than the required charge for a randomly sampled trip $d_{i, k}$ (where $k$ is   sampled according to $p_{i, j}$), the deficit $(d_{i, k} - remainCharge_i)^+$ must be purchased at the external price.  
+If, at the end of the night, the charge for the $i$-th car is less than the required charge for a randomly sampled trip $d_{i, k}$ (where $k$ is sampled according to $p_{i, j}$), the deficit $(d_{i, k} - remainCharge_i)^+$ must be purchased at the external price.  
 The penalty $\eta$ for one day is:
 $$
 \eta = \sum_{i=0}^{n} \mathbb{E}_{k \sim p_{i, j}} \left[ \max(0, d_{i, k} - remainCharge_i) \cdot external\_price \right]
