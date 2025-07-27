@@ -7,18 +7,18 @@ Grid Load is a project designed to optimize the charging schedules for a fleet o
 ## Project Structure
 
 - **tools/**
-  - `grader.py`: Manages evaluation of the charging schedule.
-  - `generator.py`: Generates input data for testing.
+  - [`grader.py`](tools/grader.py): Manages evaluation of the charging schedule.
+  - [`generator.py`](tools/generator.py): Generates input data for testing.
 - **solutions/**
-  - `baseline.cpp`: Contains a baseline implementation of the charging algorithm.
-- **task.html**: Provides a complete description of the problem with mathematical formulations and constraints.
+  - [`baseline.cpp`](solutions/baseline.cpp): Contains a barebones implementation of the charging algorithm.
+- **task.md**: Provides a complete description of the problem with mathematical formulations and constraints.
 
 ## Problem Description
 
 Bob's charging stations face constraints on energy drawn from the grid and must ensure that cars can complete their trips without incurring high costs.  
 The goal is to minimize the total cost of charging while meeting the energy requirements for each car's trip.
 
-View the full problem description with rendered formulas in `task.html`.
+View the full problem description with rendered formulas in [`task.md`](task.md).
 
 ## Usage
 
