@@ -12,10 +12,15 @@ Let $remainCharge_i$ be the charge for the $i$-th car at the start of the night.
 Initially $remainCharge_i = \frac{a_i}{2}$  
 
 Let $charge_{i, j}$ be the charge the $i$-th car has at the $j$-th minute.  
-More formally, $ charge_{i, j} = remainCharge_i + \sum_{k=0}^{j} s_{i, k} $
+More formally,
+
+$$
+charge_{i, j} = remainCharge_i + \sum_{k=0}^{j} s_{i, k} 
+$$
 
 If, at the end of the night, the charge for the $i$-th car is less than the required charge for a randomly sampled trip $d_{i, k}$ (where $k$ is sampled according to $p_{i, j}$), the deficit $(d_{i, k} - remainCharge_i)^+$ must be purchased at the external price.  
 The penalty $\eta$ for one day is:
+
 $$
 \eta = \sum_{i=0}^{n} \mathbb{E}_{k \sim p_{i, j}} \left[ \max(0, d_{i, k} - remainCharge_i) \cdot external\_price \right]
 $$
@@ -25,12 +30,14 @@ $$
 $$
 
 The total cost to minimize is the total over all the days:
+
 $$
 \text{Total Cost} = \mu + \eta
 $$
 
 At the end of each night, $remainCharge_i$ is updated based on the charging schedule, $s_{i, j}$ and the trip sampled.
 More formally, for each car $i$ and minute $j$, the charge is updated as follows:
+
 $$
 remainCharge_i = remainCharge_i + \sum_{j=0}^{479} \left( s_{i, j} \right) - \mathbb{E}_{k \sim p_{i, j}}[d_{i, k}]
 $$
@@ -126,14 +133,15 @@ After each night, you must output the charging schedule for all stations. The ou
 
 ```plaintext
 In this example, there is one station with a capacity of 100 kW. The first trip requires 3 kW with a probability of 0.7,  
-and the second trip requires 10 kW with a probability of 0.3. The car starts with 50 kW of charge. The output schedule allocates 5 kW for the first minute,  
-then 5 kW for the second minute, for the third minute the program decided the electicity price was too high and does not charge.  
-The program would read the dynamic input again with the updated prices and charge of the cars, then output the schedule and repeate for 100 days.  
+and the second trip requires 10 kW with a probability of 0.3. The car starts with 50 kW of charge.  
+The output schedule allocates 5 kW for the first minute, then 5 kW for the second minute,  
+for the third minute the program decided the electricity price was too high and does not charge. The program would read  
+the dynamic input again with the updated prices and charge of the cars, then output the schedule and repeat for 100 days.  
 ```
 
 ### Constraints
 
-- $10^3 \leq x \leq 10^4$  1
+- $10^3 \leq x \leq 10^4$  
 - $1 \leq n \leq 100$  
 - $1 \leq m \leq 5$  
 - $1 \leq a_i \leq 100$  

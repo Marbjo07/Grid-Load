@@ -2,7 +2,8 @@
 
 ## Overview
 
-Grid Load is a project designed to optimize the charging schedules for a fleet of electric cars. The system accounts for station capacities, charging requirements for various trips, and cost constraints over 100 nights.
+Grid Load is a heuristic task where you optimize the charging schedules for a fleet of electric cars.
+The system accounts for station capacities, electricity prices, charging requirements for various trips over 100 nights.
 
 ## Project Structure
 
@@ -18,7 +19,7 @@ Grid Load is a project designed to optimize the charging schedules for a fleet o
 Bob's charging stations face constraints on energy drawn from the grid and must ensure that cars can complete their trips without incurring high costs.  
 The goal is to minimize the total cost of charging while meeting the energy requirements for each car's trip.
 
-View the full problem description with rendered formulas in [`task.md`](task.md).
+View the full problem description in [`task.md`](task.md).
 
 ## Usage
 
