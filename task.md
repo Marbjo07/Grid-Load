@@ -132,11 +132,13 @@ After each night, you must output the charging schedule for all stations. The ou
 ### Explanation
 
 ```plaintext
-In this example, there is one station with a capacity of 100 kW. The first trip requires 3 kW with a probability of 0.7,  
-and the second trip requires 10 kW with a probability of 0.3. The car starts with 50 kW of charge.  
-The output schedule allocates 5 kW for the first minute, then 5 kW for the second minute,  
-for the third minute the program decided the electricity price was too high and does not charge. The program would read  
-the dynamic input again with the updated prices and charge of the cars, then output the schedule and repeat for 100 days.  
+In this example, there is one station with a capacity of 100 kW. The first trip  
+requires 3 kW with a probability of 0.7, and the second trip requires 10 kW with  
+a probability of 0.3. The car starts with 50 kW of charge. The output schedule  
+allocates 5 kW for the first minute, then 5 kW for the second minute, for the  
+third minute the program decided the electricity price was too high and does  
+not charge. The program would read the dynamic input again with the updated prices  
+and charge of the cars, then output the schedule and repeat for 100 days.  
 ```
 
 ### Constraints
