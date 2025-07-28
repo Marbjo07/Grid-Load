@@ -8,25 +8,25 @@ Help Bob loss the least amount of money possible.
 
 ## Score Function
 
-Let $remainCharge_i$ be the charge for the $i$-th car at the start of the night.
-Initially $remainCharge_i = \frac{a_i}{2}$  
+Let $\text{remainCharge}_i$ be the charge for the $i$-th car at the start of the night.
+Initially $\text{remainCharge}_i = \frac{a_i}{2}$
 
-Let $charge_{i, j}$ be the charge the $i$-th car has at the $j$-th minute.  
+Let $\text{charge}_{i, j}$ be the charge the $i$-th car has at the $j$-th minute.  
 More formally,
 
 $$
-charge_{i, j} = remainCharge_i + \sum_{k=0}^{j} s_{i, k} 
+\text{charge}_{i, j} = \text{remainCharge}_i + \sum_{k=0}^{j} s_{i, k}
 $$
 
-If, at the end of the night, the charge for the $i$-th car is less than the required charge for a randomly sampled trip $d_{i, k}$ (where $k$ is sampled according to $p_{i, j}$), the deficit $(d_{i, k} - remainCharge_i)^+$ must be purchased at the external price.  
+If, at the end of the night, the charge for the $i$-th car is less than the required charge for a randomly sampled trip $d_{i, k}$ (where $k$ is sampled according to $p_{i, j}$), the deficit $(d_{i, k} - \text{remainCharge}_i)^+$ must be purchased at the external price.  
 The penalty $\eta$ for one day is:
 
 $$
-\eta = \sum_{i=0}^{n} \mathbb{E}_{k \sim p_{i, j}} \left[ \max(0, d_{i, k} - remainCharge_i) \cdot external\_price \right]
+\eta = \sum_{i=0}^{n} E_{k \sim p_{i, j}} \left[ \max(0, d_{i, k} - \text{remainCharge}_i) \cdot external\_price \right]
 $$
 
 $$
-\mu = \sum_{i = 0}^{n}\left[ \sum_{j = 0}^{m} \left( s_{i, j} \cdot price_j \right) \right]
+\mu = \sum_{i = 0}^{n}\left[ \sum_{j = 0}^{m} \left( s_{i, j} \cdot \text{price}_j \right) \right]
 $$
 
 The total cost to minimize is the total over all the days:
@@ -35,14 +35,14 @@ $$
 \text{Total Cost} = \mu + \eta
 $$
 
-At the end of each night, $remainCharge_i$ is updated based on the charging schedule, $s_{i, j}$ and the trip sampled.
+At the end of each night, $\text{remainCharge}_i$ is updated based on the charging schedule, $s_{i, j}$ and the trip sampled.
 More formally, for each car $i$ and minute $j$, the charge is updated as follows:
 
 $$
-remainCharge_i = remainCharge_i + \sum_{j=0}^{479} \left( s_{i, j} \right) - \mathbb{E}_{k \sim p_{i, j}}[d_{i, k}]
+\text{remainCharge}_i = \text{remainCharge}_i + \sum_{j=0}^{479} \left( s_{i, j} \right) - E_{k \sim p_{i, j}}[d_{i, k}]
 $$
 
-<small> Note: the sampled trip is the same for updating $remainCharge$ and for calculating the penalty. </small>
+<small> Note: the sampled trip is the same for updating $\text{remainCharge}$ and for calculating the penalty. </small>
 
 ## Static Input Format
 
@@ -71,16 +71,16 @@ $$
 
 ## Dynamic Input Format
 
-- The real number array $price$ of length $480$: $price_j$ is the price per kW at the $j$-th minute of the night.
-- The real number $external\_price$: price per kW for using an external charging station for the night.
-- The real number array $remainCharge$ of length $n$: $remainCharge_i$ is the charge for the $i$-th car at the start of the night.  
+- The real number array $\text{price}$ of length $480$: $\text{price}_j$ is the price per kW at the $j$-th minute of the night.
+- The real number $\text{external\_price}$: price per kW for using an external charging station for the night.
+- The real number array $\text{remainCharge}$ of length $n$: $\text{remainCharge}_i$ is the charge for the $i$-th car at the start of the night.  
 The dynamic input is provided in the following order:
 
 $$
 \begin{align*}
-&price_0 \quad price_1 \quad \ldots \quad price_{479} \\
-&external\_price \\
-&remainCharge_0 \quad remainCharge_1 \quad \ldots \quad remainCharge_{n-1} \\
+&\text{price}_0 \quad \text{price}_1 \quad \ldots \quad \text{price}_{479} \\
+&\text{external\_price} \\
+&\text{remainCharge}_0 \quad \text{remainCharge}_1 \quad \ldots \quad \text{remainCharge}_{n-1} \\
 \end{align*}
 $$
 
@@ -95,7 +95,7 @@ After each night, you must output the charging schedule for all stations. The ou
 
 - For every minute $j$ ($0 \leq j < 480$): $\sum_{i=0}^{n-1} s_{i, j} \leq x$.
 - For every station $i$ and minute $j$: $0 \leq s_{i, j}$.
-- For every station $i$: the total charge delivered over the night cannot exceed the car's capacity: $\sum_{j=0}^{479} s_{i, j} + remainCharge_i \leq a_i$.
+- For every station $i$: the total charge delivered over the night cannot exceed the car's capacity: $\sum_{j=0}^{479} s_{i, j} + \text{remainCharge}_i \leq a_i$.
 
 ## Interaction
 
@@ -146,6 +146,6 @@ the dynamic input again with the updated prices and charge of the cars, then out
 - $1 \leq m \leq 5$  
 - $1 \leq a_i \leq 100$  
 - $1 \leq d_{i, j} \leq a_i$  
-- $\sum_{j = 0}^{m} (p_{i, j}) = 1$  
-- $0 \leq price_i \leq 1$  
-- $0 \leq \max_{i = 0}^{n} \left( price_i \right) \leq external\_price \leq 5$
+- $\sum_{j = 0}^{m} \ (p_{i, j}) = 1$  
+- $0 \leq \text{price}_i \leq 1$  
+- $0 \leq \max_{i = 0}^{n} \left( \text{price}_i \right) \leq \text{external\_price} \leq 5$
