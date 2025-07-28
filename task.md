@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Your friend Bob is the owner of a couple charging stations around the world. He made a mistake when advertising for his service, offering free charging for 100 days. He has also made a deal with the city government, which limits the amount of energy that can be drawn from the grid. Each station is tied to a car, and each car has a maximum capacity. Due to overheating issues, the stations can only charge the cars at night. Bob has analyzed the patterns of the cars and has found the different trips that each car will take. He has also found the minimum charge required to complete each trip, and the chance that this charge will be sampled. Each car will return to the same station after completing its trip. Bob wants to minimize the cost of charging the cars while ensuring that they can complete their trips. If a car cannot complete its trip, the car owner will bill Bob for using a public charging station, which has a large markup. Bobs system runs for 100 consecutive nights. Each night you are given updated battery levels and new prices. You reply with that night's charging plan.  
+Your friend Bob is the owner of a couple charging stations around the world. He made a mistake when advertising for his service, offering free charging for 100 days. He has also made a deal with the city government, which limits the amount of energy that can be drawn from the grid. Each station is tied to a car, and each car has a maximum capacity. Due to overheating issues, the stations can only charge the cars at night. Bob has analyzed the patterns of the cars and has found the different trips that each car will take. He has also found the minimum charge required to complete each trip, and the chance that this charge will be sampled. Each car will return to the same station after completing its trip. Bob wants to minimize the cost of charging the cars while ensuring that they can complete their trips. If a car cannot complete its trip, the car owner will bill Bob for using a public charging station, which has a large markup. Help Bob for 100 consecutive nights. Each night you are given updated battery levels and new prices. You reply with that night's charging plan.  
 The cost‐function is applied per‑night, but the simulation spans 100 days.  
 Help Bob loss the least amount of money possible.
 
@@ -22,7 +22,7 @@ If, at the end of the night, the charge for the $i$-th car is less than the requ
 The penalty $\eta$ for one day is:
 
 $$
-\eta = \sum_{i=0}^{n} E_{k \sim p_{i, j}} \left[ \max(0, d_{i, k} - \text{remainCharge}_i) \cdot external\_price \right]
+\eta = \sum_{i=0}^{n} E_{k \sim p_{i, j}} \left[ \max(0, d_{i, k} - \text{remainCharge}_i) \cdot \text{externalPrice} \right]
 $$
 
 $$
@@ -72,14 +72,14 @@ $$
 ## Dynamic Input Format
 
 - The real number array $\text{price}$ of length $480$: $\text{price}_j$ is the price per kW at the $j$-th minute of the night.
-- The real number $\text{external\_price}$: price per kW for using an external charging station for the night.
+- The real number $\text{externalPrice}$: price per kW for using an external charging station for the night.
 - The real number array $\text{remainCharge}$ of length $n$: $\text{remainCharge}_i$ is the charge for the $i$-th car at the start of the night.  
 The dynamic input is provided in the following order:
 
 $$
 \begin{align*}
 &\text{price}_0 \quad \text{price}_1 \quad \ldots \quad \text{price}_{479} \\
-&\text{external\_price} \\
+&\text{externalPrice} \\
 &\text{remainCharge}_0 \quad \text{remainCharge}_1 \quad \ldots \quad \text{remainCharge}_{n-1} \\
 \end{align*}
 $$
@@ -148,4 +148,4 @@ the dynamic input again with the updated prices and charge of the cars, then out
 - $1 \leq d_{i, j} \leq a_i$  
 - $\sum_{j = 0}^{m} \ (p_{i, j}) = 1$  
 - $0 \leq \text{price}_i \leq 1$  
-- $0 \leq \max_{i = 0}^{n} \left( \text{price}_i \right) \leq \text{external\_price} \leq 5$
+- $0 \leq \max_{i = 0}^{n} \left( \text{price}_i \right) \leq \text{externalPrice} \leq 5$
