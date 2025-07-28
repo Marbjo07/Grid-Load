@@ -1,13 +1,14 @@
 import os
-import random
 import subprocess
+import numpy as np
+
 from tqdm import trange, tqdm
-from random import uniform, random
 
 MINUTES = 8 * 60
 DAYS = 100
-price_upper = 1
-external_price_upper = 5
+PRICE_UPPER = 1
+EXTERNAL_PRICE_UPPER = 5
+FLOATING_POINT_EPSILON = 1e-3
 
 def read_input(filename):
     with open(filename) as f:
@@ -21,36 +22,32 @@ def read_input(filename):
 
     return x, n, m, a, p, d
 
-def sample_trip(p_row):
-    r = random()
-    total = 0
-    for idx, prob in enumerate(p_row):
-        total += prob
-        if r <= total:
-            return idx
-    return len(p_row) - 1
-
 def run_solution(x, n, m, a, p, d, solution_cmd, input_filepath="input.txt"):
     process = subprocess.Popen(
         solution_cmd,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
-        text=True
+        text=True,
+        bufsize=2
     )
 
+    p = np.array(p, dtype=float)
+    a = np.array(a, dtype=float)
+
+    # Write the static input
     with open(input_filepath, "r") as f:
         static_input = f.read()
     process.stdin.write(static_input)
     process.stdin.flush()
 
     total_cost = 0.0
-    remain_charge = [u / 2 for u in a]
+    remain_charge = np.array([u / 2 for u in a])
 
     for day in trange(DAYS, desc="Days: ", leave=False):
-        # Send current charge
-        price = [uniform(1, price_upper) for _ in range(MINUTES)]
-        external_price = uniform(max(price), external_price_upper)
+        # Write the dynamic input
+        price = np.random.uniform(1, PRICE_UPPER, size=MINUTES)
+        external_price = np.random.uniform(max(price), EXTERNAL_PRICE_UPPER)
 
         write_input = " ".join(map(str, price)) + "\n"
         write_input += str(external_price) + "\n"
@@ -59,37 +56,42 @@ def run_solution(x, n, m, a, p, d, solution_cmd, input_filepath="input.txt"):
         process.stdin.write(write_input)
         process.stdin.flush()
 
-        # Read schedule s (n rows, each with MINUTES values)
-        s = [0] * n
+        # Read the schedule
+        s = np.zeros((n, MINUTES), dtype=float)
         for i in range(n):
             line = process.stdout.readline()
             if not line:
                 raise RuntimeError("Solution terminated early.")
             
-            row = list(map(float, line.strip().split()))
+            row = np.fromstring(line, dtype=float, sep=' ')
             if len(row) != MINUTES:
                 raise RuntimeError(f"Expected {MINUTES} values, got {len(row)}.")
-
+            
             s[i] = row
 
-        for i in range(n):
-            charge = remain_charge[i]
-            if charge > a[i]:
-                raise RuntimeError(f"Charge {charge} exceeds capacity {a[i]} for station {i}.")
+        if s.min() < -FLOATING_POINT_EPSILON:
+            raise RuntimeError(f"Negative values in schedule: {s.min()}.")
 
-            mu_cost = 0.0
-            for j in range(MINUTES):
-                mu_cost += s[i][j] * price[j]
-                charge += s[i][j]
-            
-            final_charge = charge
-            trip = sample_trip(p[i])
-            required = d[i][trip]
-            
-            penalty = max(required - final_charge, 0) * external_price
-            total_cost += mu_cost + penalty
-            
-            remain_charge[i] = max(final_charge - required, 0)
+        # Update remaining charge
+        remain_charge += s.sum(axis=1)
+
+        if remain_charge.max() > x + FLOATING_POINT_EPSILON:
+            raise RuntimeError(f"Charge {remain_charge.max()} exceeds maximum capacity {x}.")
+
+        if (remain_charge > a + FLOATING_POINT_EPSILON).any():
+            raise RuntimeError(f"Charge {remain_charge} exceeds initial capacities {a}.")
+
+        # Calculate costs
+        charge_cost = s.sum(axis=0) * price
+        total_cost += charge_cost.sum()
+
+        trips = np.array([np.random.choice(d[i], 1, p=p[i]) for i in range(n)]).flatten()
+        penalty = np.maximum(trips - remain_charge, 0) * external_price
+        total_cost += penalty.sum()
+
+
+        remain_charge = np.clip(remain_charge - trips, 0, None)
+
 
     process.stdin.close()
     return_code = process.wait(timeout=2)
@@ -100,8 +102,8 @@ def run_solution(x, n, m, a, p, d, solution_cmd, input_filepath="input.txt"):
 
     return total_cost
 
-def main():
 
+def main():
     test_dir = "test_cases"
     if not os.path.exists(test_dir):
         os.makedirs(test_dir)
